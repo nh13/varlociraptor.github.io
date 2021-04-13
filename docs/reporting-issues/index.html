@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+      <title>Varlociraptor Homepage</title>
+
+      
+      
+
+      <!-- CSS -->
+      
+      <link rel="stylesheet" href="https://varlociraptor.github.io/book.css">
+      
+
+      
+      
+    </head>
+
+    <body>
+        <div class="menu">
+            
+            
+            <nav role="navigation">
+                <ul>
+                    
+                        
+                        
+                            
+                            <li >
+                                
+                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;landing&#x2F;">
+                                    
+                                    Home
+                                </a>
+                                
+                            </li>
+                        
+                            
+                            <li >
+                                
+                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;">
+                                    
+                                    Documentation
+                                </a>
+                                
+                                    <ul>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;installation&#x2F;">
+                                                    
+                                                    Installation
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;calling&#x2F;">
+                                                    
+                                                    Calling variants
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;filtering&#x2F;">
+                                                    
+                                                    Filtering variant calls
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;estimating&#x2F;">
+                                                    
+                                                    Estimating properties
+                                                </a>
+                                            </li>
+                                        
+                                            <li class="active">
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;reporting-issues&#x2F;">
+                                                    
+                                                    Reporting issues
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;model&#x2F;">
+                                                    
+                                                    Statistical model
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li >
+                                
+                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;authors&#x2F;">
+                                    
+                                    Authors
+                                </a>
+                                
+                            </li>
+                        
+                    
+                </ul>
+            </nav>
+            
+            <img src="/landing/varlociraptor-logo.svg" style="width: 8em; margin: auto; display: block; margin-top: 2em" />
+            
+        </div>
+
+        <div class="page">
+            <div class="page__header">
+                <div class="menu-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                
+                <span class="search-icon">🔎</span>
+                
+            </div>
+
+            <div class="page__content">
+                
+                <div class="search-container">
+                    <input id="search" type="search" placeholder="Search..">
+                    <div class="search-results">
+                        <div class="search-results__header"></div>
+                        <ul class="search-results__items"></ul>
+                    </div>
+                </div>
+                
+                <div class="book-content">
+                    
+    <h1>Reporting issues</h1>
+    <p>For reporting issues, please use our <a href="https://github.com/varlociraptor/varlociraptor/issues">issue tracker</a>.
+If problems entail certain variant calls, it is particularly easy to create a proper test case with varlociraptor (see below).</p>
+<h2 id="issues-with-called-variants">Issues with called variants</h2>
+<p>If you have the feeling that a variant call from varlociraptor is wrong, we would be grateful to receive a test case.
+For this purpose, varlociraptor provides an interface to automatically create test cases from runs.
+Let</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">varlociraptor</span><span style="color:#c0c5ce;"> call variants tumor-normal</span><span style="color:#bf616a;"> --purity</span><span style="color:#c0c5ce;"> 0.75</span><span style="color:#bf616a;"> --tumor</span><span style="color:#c0c5ce;"> tumor.bcf</span><span style="color:#bf616a;"> --normal</span><span style="color:#c0c5ce;"> normal.bcf
+</span></code></pre>
+<p>be the original command you ran which yielded a variant call you believe to be wrong.
+Then, you can issue</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">varlociraptor</span><span style="color:#c0c5ce;"> call variants</span><span style="color:#bf616a;"> --testcase-prefix</span><span style="color:#c0c5ce;"> testcase</span><span style="color:#bf616a;"> --testcase-locus</span><span style="color:#c0c5ce;"> CHROM:POS tumor-normal</span><span style="color:#bf616a;"> --purity</span><span style="color:#c0c5ce;"> 0.75</span><span style="color:#bf616a;"> --tumor</span><span style="color:#c0c5ce;"> tumor.bcf</span><span style="color:#bf616a;"> --normal</span><span style="color:#c0c5ce;"> normal.bcf
+</span></code></pre>
+<p>with <code>CHROM:POS</code> being the locus of the variant as it is defined in the vcf file (1-based position).
+Varlociraptor will then create a folder under the given prefix (here <code>testcase</code>), containing</p>
+<ul>
+<li>relevant subsets of the given BAM files (the reads around the locus),</li>
+<li>a VCF file with the candidate variant,</li>
+<li>a file <code>testcase.yaml</code> containing the used parameters, the reference sequence around the variant, and sample information.</li>
+</ul>
+<p>The <code>testcase.yaml</code> looks similar to this:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">expected</span><span style="color:#c0c5ce;">:
+  </span><span style="color:#bf616a;">allelefreqs</span><span style="color:#c0c5ce;">:
+    </span><span style="color:#65737e;"># write down a list of expressions of the form
+    </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">sample_name &gt; 0.45 &amp;&amp; sample_name &lt; 0.55
+  posteriors</span><span style="color:#c0c5ce;">:
+    </span><span style="color:#65737e;"># write down a list of expressions of the form
+    </span><span style="color:#c0c5ce;">- </span><span style="color:#a3be8c;">PROB_SOMATIC_TUMOR &lt;= 0.05
+    </span><span style="color:#c0c5ce;">- </span><span style="color:#a3be8c;">PROB_GERMLINE_HET &gt; 0.05
+
+</span><span style="color:#65737e;"># necessary bam files
+</span><span style="color:#bf616a;">samples</span><span style="color:#c0c5ce;">:
+  </span><span style="color:#bf616a;">tumor</span><span style="color:#c0c5ce;">:
+    </span><span style="color:#bf616a;">path</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">tumor.bam
+    properties</span><span style="color:#c0c5ce;">: &#39;</span><span style="color:#a3be8c;">{&quot;insert_size&quot;:{&quot;mean&quot;:312.0,&quot;sd&quot;:11.89254089203071},&quot;max_del_cigar_len&quot;:30,&quot;max_ins_cigar_len&quot;:12,&quot;frac_max_softclip&quot;:0.69}</span><span style="color:#c0c5ce;">&#39;
+  </span><span style="color:#bf616a;">normal</span><span style="color:#c0c5ce;">:
+    </span><span style="color:#bf616a;">path</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">normal.bam
+    properties</span><span style="color:#c0c5ce;">: &#39;</span><span style="color:#a3be8c;">{&quot;insert_size&quot;:{&quot;mean&quot;:312.0,&quot;sd&quot;:11.89254089203071},&quot;max_del_cigar_len&quot;:30,&quot;max_ins_cigar_len&quot;:12,&quot;frac_max_softclip&quot;:0.69}</span><span style="color:#c0c5ce;">&#39;
+
+
+</span><span style="color:#65737e;"># candidate variant
+</span><span style="color:#bf616a;">candidate</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">candidates.vcf
+
+</span><span style="color:#65737e;"># reference sequence
+</span><span style="color:#bf616a;">reference</span><span style="color:#c0c5ce;">:
+  </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">chr1
+  seq</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">cccaaaatgctgggattataggcataagttaccatgcctggccATTTTTGTGTCTTTCTTGATGAGCAACTGCTCTGTTCCAGCCCTGTGCTGGGCATATTCACATCTTTTTCTTCTCTCTCTCTCTtttctttctttctttctttcttttctttctttctttctttcctttctttctttctttctttctttctttctttctttctttttctttttctttccttccttccttcttcctttctttctttctttctttctttttctttccttccttccttcttccttccttgcttgcttccttccttctttccctccctccctccctccctccttacttccctccctccctctctctttctctttccttctttttctttcgactgtgtcttgttct
+
+options</span><span style="color:#c0c5ce;">: &#39;</span><span style="color:#a3be8c;">{&quot;Call&quot;: {&quot;kind&quot;: {&quot;Variants&quot;: {&quot;spurious_ins_rate&quot;: 2.8e-06, &quot;spurious_del_rate&quot;:
+  5.1e-06, &quot;spurious_insext_rate&quot;: 0.0, &quot;spurious_delext_rate&quot;: 0.0, &quot;indel_window&quot;:
+  100, &quot;omit_snvs&quot;: false, &quot;omit_indels&quot;: false, &quot;max_indel_len&quot;: 1000, &quot;max_depth&quot;:
+  200, &quot;reference&quot;: &quot;../hg18/chr1.fa&quot;, &quot;candidates&quot;: &quot;candidates.vcf&quot;, &quot;output&quot;: null,
+  &quot;testcase_locus&quot;: &quot;chr1:17926776:1&quot;, &quot;testcase_prefix&quot;: &quot;/tmp/testcase&quot;, &quot;mode&quot;:
+  {&quot;TumorNormal&quot;: {&quot;tumor&quot;: &quot;tumor.bam&quot;, &quot;normal&quot;: &quot;normal.bam&quot;, &quot;purity&quot;: 1.0}}}}}}</span><span style="color:#c0c5ce;">&#39;
+</span></code></pre>
+<p>The first section <code>expected</code>, has to be edited by you in order to denote the expected allele frequencies, and the posterior probabilities.
+Thereby, both fields are optional.</p>
+<p>Finally, the testcase can be zipped and attached to a <a href="https://github.com/varlociraptor/varlociraptor/issues">new issue in our issue tracker</a>.
+Before uploading a testcase like this, make sure that the testcase does not contain identifying information about your samples (e.g., no clear names in files).
+In general, even creating test cases from clinical samples might be fine, because they only contain reads around the problematic locus.
+Of course, that decision is up to you.
+In any case, your help with improving varlociraptor is greatly appreciated.</p>
+
+
+                </div>
+            </div>
+
+            <div class="prev-link">
+                
+    
+        <a class="previous" href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;estimating&#x2F;"><</a>
+    
+
+            </div>
+
+            <div class="next-link">
+                
+    
+        <a class="next" href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;model&#x2F;">></a>
+    
+
+            </div>
+        </div>
+
+        
+            
+            <script type="text/javascript" src="https://varlociraptor.github.io/elasticlunr.min.js"></script>
+            <script type="text/javascript" src="https://varlociraptor.github.io/search_index.en.js"></script>
+            
+            <script type="text/javascript" src="https://varlociraptor.github.io/book.js"></script>
+        
+    </body>
+
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+      <title>Varlociraptor Homepage</title>
+
+      
+      
+
+      <!-- CSS -->
+      
+      <link rel="stylesheet" href="https://varlociraptor.github.io/book.css">
+      
+
+      
+      
+    </head>
+
+    <body>
+        <div class="menu">
+            
+            
+            <nav role="navigation">
+                <ul>
+                    
+                        
+                        
+                            
+                            <li >
+                                
+                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;landing&#x2F;">
+                                    
+                                    Home
+                                </a>
+                                
+                            </li>
+                        
+                            
+                            <li >
+                                
+                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;">
+                                    
+                                    Documentation
+                                </a>
+                                
+                                    <ul>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;installation&#x2F;">
+                                                    
+                                                    Installation
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;calling&#x2F;">
+                                                    
+                                                    Calling variants
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;filtering&#x2F;">
+                                                    
+                                                    Filtering variant calls
+                                                </a>
+                                            </li>
+                                        
+                                            <li class="active">
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;estimating&#x2F;">
+                                                    
+                                                    Estimating properties
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;reporting-issues&#x2F;">
+                                                    
+                                                    Reporting issues
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;model&#x2F;">
+                                                    
+                                                    Statistical model
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li >
+                                
+                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;authors&#x2F;">
+                                    
+                                    Authors
+                                </a>
+                                
+                            </li>
+                        
+                    
+                </ul>
+            </nav>
+            
+            <img src="/landing/varlociraptor-logo.svg" style="width: 8em; margin: auto; display: block; margin-top: 2em" />
+            
+        </div>
+
+        <div class="page">
+            <div class="page__header">
+                <div class="menu-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                
+                <span class="search-icon">🔎</span>
+                
+            </div>
+
+            <div class="page__content">
+                
+                <div class="search-container">
+                    <input id="search" type="search" placeholder="Search..">
+                    <div class="search-results">
+                        <div class="search-results__header"></div>
+                        <ul class="search-results__items"></ul>
+                    </div>
+                </div>
+                
+                <div class="book-content">
+                    
+    <h1>Estimating properties</h1>
+    <h2 id="estimating-tumor-mutational-burden">Estimating tumor mutational burden</h2>
+<p>Varlociraptor enables an uncertainty aware computation of the tumor mutational burden (TMB).
+TMB is usually defined as the number of somatic, non-synonymous coding mutations per megabase of the measured coding genome.
+With</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">varlociraptor --coding-genome-size</span><span style="color:#c0c5ce;"> 3e7</span><span style="color:#bf616a;"> --tumor-sample</span><span style="color:#c0c5ce;"> tumor</span><span style="color:#bf616a;"> --somatic-tumor-events</span><span style="color:#c0c5ce;"> SOMATIC_TUMOR &lt; calls.annotated.bcf &gt; tmb.vl.json
+</span></code></pre>
+<p>Varlociraptor will produce a <a href="https://vega.github.io/vega-lite">Vega-Lite</a> specification of a plot, where the x-axis depicts the 
+minimum allele frequency, and the y-axis shows the TMB in mutations per megabase.
+The input file <code>calls.annotated.bcf</code> has to be a VCF/BCF file that has been obtained from Varlociraptor and annotated with e.g. <a href="http://snpeff.sourceforge.net">SnpEff</a>, such that Varlociraptor can select non-synonymous coding mutations.
+The vega specification is a text file in JSON format, that can be converted to e.g. an SVG image via the <a href="https://anaconda.org/conda-forge/vega-lite-cli">Vega-Lite command line utilities</a>:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">vl2svg</span><span style="color:#c0c5ce;"> tmb.vl.json tmb.svg
+</span></code></pre>
+<p>Note that the coding genome size given with <code>--coding-genome-size</code> has to reflect the <em>measured part</em> of the coding genome.
+In case the estimation is conducted on e.g. panel sequencing (where only a small number of genes is captured), the value has 
+to be the size of the coding genome within this capturing.
+After using vl2svg for convertion of the JSON to an image, the result can look like this:</p>
+<p><img src="../tmb.svg" alt="example-tmb-plot" /></p>
+<p>Importantly, the TMB is calculated as expected value over the posterior probabilities for each variant to be somatic.
+Hence, the TMB estimate properly considers the uncertainty in the data.
+Moreover, as we show a TMB estimate for each minimum allele frequency, it becomes possible to reason over the clonal structure 
+of the tumor, instead of considering only a single overall number. We expect this to increase the predictive power of
+the TMB.</p>
+
+
+                </div>
+            </div>
+
+            <div class="prev-link">
+                
+    
+        <a class="previous" href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;filtering&#x2F;"><</a>
+    
+
+            </div>
+
+            <div class="next-link">
+                
+    
+        <a class="next" href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;reporting-issues&#x2F;">></a>
+    
+
+            </div>
+        </div>
+
+        
+            
+            <script type="text/javascript" src="https://varlociraptor.github.io/elasticlunr.min.js"></script>
+            <script type="text/javascript" src="https://varlociraptor.github.io/search_index.en.js"></script>
+            
+            <script type="text/javascript" src="https://varlociraptor.github.io/book.js"></script>
+        
+    </body>
+
+</html>

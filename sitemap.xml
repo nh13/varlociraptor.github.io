@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://varlociraptor.github.io/</loc>
+    </url>
+    <url>
+        <loc>https://varlociraptor.github.io/authors/</loc>
+    </url>
+    <url>
+        <loc>https://varlociraptor.github.io/docs/</loc>
+    </url>
+    <url>
+        <loc>https://varlociraptor.github.io/docs/calling/</loc>
+    </url>
+    <url>
+        <loc>https://varlociraptor.github.io/docs/estimating/</loc>
+    </url>
+    <url>
+        <loc>https://varlociraptor.github.io/docs/filtering/</loc>
+    </url>
+    <url>
+        <loc>https://varlociraptor.github.io/docs/installation/</loc>
+    </url>
+    <url>
+        <loc>https://varlociraptor.github.io/docs/model/</loc>
+    </url>
+    <url>
+        <loc>https://varlociraptor.github.io/docs/reporting-issues/</loc>
+    </url>
+    <url>
+        <loc>https://varlociraptor.github.io/landing/</loc>
+    </url>
+</urlset>

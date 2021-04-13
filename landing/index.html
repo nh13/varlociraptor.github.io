@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+      <title>Varlociraptor Homepage</title>
+
+      
+      
+
+      <!-- CSS -->
+      
+      <link rel="stylesheet" href="https://varlociraptor.github.io/book.css">
+      
+
+      
+      
+    </head>
+
+    <body>
+        <div class="menu">
+            
+            
+            <nav role="navigation">
+                <ul>
+                    
+                        
+                        
+                            
+                            <li class="active">
+                                
+                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;landing&#x2F;">
+                                    
+                                    Home
+                                </a>
+                                
+                            </li>
+                        
+                            
+                            <li >
+                                
+                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;">
+                                    
+                                    Documentation
+                                </a>
+                                
+                                    <ul>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;installation&#x2F;">
+                                                    
+                                                    Installation
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;calling&#x2F;">
+                                                    
+                                                    Calling variants
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;filtering&#x2F;">
+                                                    
+                                                    Filtering variant calls
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;estimating&#x2F;">
+                                                    
+                                                    Estimating properties
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;reporting-issues&#x2F;">
+                                                    
+                                                    Reporting issues
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;model&#x2F;">
+                                                    
+                                                    Statistical model
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li >
+                                
+                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;authors&#x2F;">
+                                    
+                                    Authors
+                                </a>
+                                
+                            </li>
+                        
+                    
+                </ul>
+            </nav>
+            
+            <img src="/landing/varlociraptor-logo.svg" style="width: 8em; margin: auto; display: block; margin-top: 2em" />
+            
+        </div>
+
+        <div class="page">
+            <div class="page__header">
+                <div class="menu-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                
+                <span class="search-icon">🔎</span>
+                
+            </div>
+
+            <div class="page__content">
+                
+                <div class="search-container">
+                    <input id="search" type="search" placeholder="Search..">
+                    <div class="search-results">
+                        <div class="search-results__header"></div>
+                        <ul class="search-results__items"></ul>
+                    </div>
+                </div>
+                
+                <div class="book-content">
+                    
+    <h1>Home</h1>
+    <div style="text-align: center;">
+<img src="varlociraptor-logo.svg" style="width: 25%">
+<p>Flexible, arbitrary-scenario, uncertainty-aware variant calling <br/> with parameter free filtration via FDR control.</p>
+</div>
+<style>
+ul {
+  display: inline-block;
+  text-align: left;
+}
+h1 {
+  display: none;
+}
+</style>
+<div style="text-align: left">
+<h3 id="key-features">Key features</h3>
+<ul>
+<li>Calls SNVs, MNVs, indels, arbitrary replacements, inversions, duplications, and breakends in all length ranges (from small to structural) with a unified statistical model.</li>
+<li>The statistical model entails all possible sources of uncertainty (mapping, typing, heterogeneity) and biases (strand, read pair orientation, read position, sampling, contamination).</li>
+<li>Resulting variant calls can be filtered by false discovery rate. No parameter tuning necessary.</li>
+<li>Maximum a posteriori allele frequency estimates are provided with each call.</li>
+</ul>
+<h3 id="calling-modes">Calling modes</h3>
+<ul>
+<li>Tumor-normal-calling, classifying variants as somatic in tumor, somatic in normal, germline, or absent.</li>
+<li>Generic, grammar based configuration of the statistical model, allowing to call variants for arbitrary scenarios (including germline, tumor/normal/relapse, pedigrees, FFPE data, and anything else).</li>
+</ul>
+<hr />
+<p><a href="https://bioconda.github.io/recipes/varlociraptor/README.html"><img src="https://img.shields.io/conda/dn/bioconda/varlociraptor?label=bioconda%20downloads" alt="Bioconda" /></a>
+<a href="https://github.com/varlociraptor/varlociraptor"><img src="https://img.shields.io/badge/code%20on-github-blue" alt="Repo" /></a>
+<a href="https://github.com/varlociraptor/varlociraptor/commits/master"><img src="https://img.shields.io/github/workflow/status/varlociraptor/varlociraptor/CI/master?label=tests" alt="GitHub Workflow Status" /></a>
+<a href="https://github.com/varlociraptor/varlociraptor/blob/master/LICENSE"><img src="https://img.shields.io/github/license/varlociraptor/varlociraptor" alt="License" /></a>
+<a href="https://codecov.io/gh/varlociraptor/varlociraptor"><img src="https://img.shields.io/codecov/c/github/varlociraptor/varlociraptor/master.svg?label=test%20coverage" alt="Codecov" /></a>
+<a href="https://docs.rs/varlociraptor"><img src="https://img.shields.io/badge/API-documentation-blue.svg" alt="API docs" /></a>
+<a href="http://commitizen.github.io/cz-cli/"><img src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg" alt="Commitizen friendly" /></a></p>
+</div>
+
+
+                </div>
+            </div>
+
+            <div class="prev-link">
+                
+    
+    
+    
+    
+        
+        
+            
+        
+    
+        
+        
+            
+        
+    
+        
+        
+            
+        
+    
+
+            </div>
+
+            <div class="next-link">
+                
+    
+        
+        
+        
+        
+            
+            
+            
+                
+            
+        
+            
+            
+                <a class="next" href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;">></a>
+                
+                
+            
+            
+        
+            
+            
+            
+        
+    
+
+            </div>
+        </div>
+
+        
+            
+            <script type="text/javascript" src="https://varlociraptor.github.io/elasticlunr.min.js"></script>
+            <script type="text/javascript" src="https://varlociraptor.github.io/search_index.en.js"></script>
+            
+            <script type="text/javascript" src="https://varlociraptor.github.io/book.js"></script>
+        
+    </body>
+
+</html>

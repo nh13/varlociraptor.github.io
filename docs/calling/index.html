@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+      <title>Varlociraptor Homepage</title>
+
+      
+      
+
+      <!-- CSS -->
+      
+      <link rel="stylesheet" href="https://varlociraptor.github.io/book.css">
+      
+
+      
+      
+    </head>
+
+    <body>
+        <div class="menu">
+            
+            
+            <nav role="navigation">
+                <ul>
+                    
+                        
+                        
+                            
+                            <li >
+                                
+                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;landing&#x2F;">
+                                    
+                                    Home
+                                </a>
+                                
+                            </li>
+                        
+                            
+                            <li >
+                                
+                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;">
+                                    
+                                    Documentation
+                                </a>
+                                
+                                    <ul>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;installation&#x2F;">
+                                                    
+                                                    Installation
+                                                </a>
+                                            </li>
+                                        
+                                            <li class="active">
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;calling&#x2F;">
+                                                    
+                                                    Calling variants
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;filtering&#x2F;">
+                                                    
+                                                    Filtering variant calls
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;estimating&#x2F;">
+                                                    
+                                                    Estimating properties
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;reporting-issues&#x2F;">
+                                                    
+                                                    Reporting issues
+                                                </a>
+                                            </li>
+                                        
+                                            <li >
+                                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;model&#x2F;">
+                                                    
+                                                    Statistical model
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li >
+                                
+                                <a href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;authors&#x2F;">
+                                    
+                                    Authors
+                                </a>
+                                
+                            </li>
+                        
+                    
+                </ul>
+            </nav>
+            
+            <img src="/landing/varlociraptor-logo.svg" style="width: 8em; margin: auto; display: block; margin-top: 2em" />
+            
+        </div>
+
+        <div class="page">
+            <div class="page__header">
+                <div class="menu-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                
+                <span class="search-icon">🔎</span>
+                
+            </div>
+
+            <div class="page__content">
+                
+                <div class="search-container">
+                    <input id="search" type="search" placeholder="Search..">
+                    <div class="search-results">
+                        <div class="search-results__header"></div>
+                        <ul class="search-results__items"></ul>
+                    </div>
+                </div>
+                
+                <div class="book-content">
+                    
+    <h1>Calling variants</h1>
+    <p>Varlociraptor allows to call small and structural variant events in different scenarios.
+Note that varlociraptor requires to provide a set of candidate variants to consider.
+By this, our model becomes independent of denovo variant detection mechanisms and can be combined with any caller (e.g. GATK, Freebayes, Delly, ...). In particular, you can also first combine candidates from different callers, to cover diverse variant types and length ranges.
+Let <code>candidates.bcf</code> be the set of candidate variant calls (VCF or BCF format, see <a href="https://samtools.github.io/bcftools/">bcftools</a>).
+Let <code>reference.fa</code> be the reference genome FASTA file (indexed with <a href="https://www.htslib.org/doc/samtools.html">samtools</a>).</p>
+<h2 id="preprocessing-per-sample-observations">Preprocessing per-sample observations</h2>
+<p>First, varlociraptor requires to preprocess the candidate variants in order to obtain per-sample observations for the actual calling process.
+Let <code>sample.bam</code> be the aligned reads of the sample to preprocess.
+While varlociraptor does not require a particular read aligner, it assumes that provided mapping qualities (MAPQ) are as accurate as possible, and that too large indels are encoded as softclips (i.e. it expects BAMs in <a href="https://bio-bwa.sourceforge.net/">bwa mem</a> style).
+Preprocessing can be started with</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">varlociraptor</span><span style="color:#c0c5ce;"> preprocess variants reference.fa</span><span style="color:#bf616a;"> --bam</span><span style="color:#c0c5ce;"> sample.bam &lt; candidates.bcf &gt; sample.observations.bcf
+</span></code></pre>
+<p>In other words, the candidate variants are piped into varlociraptor (with the <code>&lt;</code> shell operator) and observations are piped into <code>sample.observations.bcf</code> (with the <code>&gt;</code> shell operator).</p>
+<p>Note that the candidate variants (here <code>candidates.bcf</code>) have to be <strong>the same for each sample</strong>.
+This can be achieved by either jointly calling across all samples (as possible with most variant callers), or by merging candidates from all involved samples into a single VCF/BCF file.
+From the candidate variant file, only <code>CHROM</code>, <code>POS</code>, <code>REF</code>, <code>ALT</code>, <code>EVENT</code> (in case of breakends), <code>END</code>, and <code>SVLEN</code> (if present) are used. Other fields are ignored.
+Variant types that are not (yet) supported by Varlociraptor will be dropped (with notification on STDERR).</p>
+<h3 id="parallelization">Parallelization</h3>
+<p>Instead of offering internal parallelization, <code>varlociraptor preprocess variants</code> should be parallelized via a scatter-gather.
+That means that you first split the <code>candidates.bcf</code> into chunks of equal size.
+This can best be done via <a href="https://github.com/rust-bio/rust-bio-tools">Rust-Bio-Tools</a> (<code>rbt</code>), which offers a subcommand for splitting VCF/BCF files while properly handling events that span multiple records (breakend events with <code>SVTYPE=BND</code>).
+For example, with</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">rbt</span><span style="color:#c0c5ce;"> vcf-split candidates.bcf chunk{0..15}.bcf
+</span></code></pre>
+<p>the <code>candidates.bcf</code> is splitted into 16 chunks of approximately equal size.
+After applying <code>varlociraptor preprocess variants</code> and also the calling steps described below (and, depending on the research question, a variant annotation tool like VEP), the processed chunks can be merged again.</p>
+<p>If the input candidates did contain breakend variants (<code>SVTYPE=BND</code>, which only happens when generated by structural variant callers), they have to be sorted first e.g., via <code>bcftools sort</code>.
+Merging can happen via <code>bcftools concat</code>.</p>
+<h3 id="fast-mode">Fast mode</h3>
+<p>Preprocessing is the most time-intensive part for variant calling with varlociraptor.
+However, it only has to be done once for each sample, and can be re-used for different variant calling steps.
+In case the exact allele frequency is less important for you (e.g. with large cohorts), you can add the argument <code>--pairhmm-mode fast</code>.
+This will approximate the pair HMM computation of Varlociraptor by just considering the optimal alignment path, thereby changing the computation of the allele likelihoods from quadratic to linear.
+In rare cases this can lead to wrong probabilities for single reads though, such that allele frequencies can become slightly incorrect.</p>
+<h2 id="calling">Calling</h2>
+<p>The basic calling command is</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">varlociraptor</span><span style="color:#c0c5ce;"> call variants ...
+</span></code></pre>
+<p>The dots (<code>...</code>) refer to the selected calling mode, which can be one of the following:</p>
+<ol>
+<li><strong>Tumor-normal variant calling:</strong> this assumes that a tumor and a corresponding healthy sample is given.</li>
+<li><strong>Generic variant calling:</strong> via a <em>variant calling grammar</em>, arbitrary calling scenarios can be defined.</li>
+</ol>
+<h3 id="note-on-amplicon-sequencing-data">Note on amplicon sequencing data</h3>
+<p>With amplicon sequencing data, variants are usually covered only by a few (down to a single) amplicon, from which many duplicates are sequenced.
+It important to deactivate read position bias handling via</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">varlociraptor</span><span style="color:#c0c5ce;"> call variants</span><span style="color:#bf616a;"> --omit-read-position-bias</span><span style="color:#c0c5ce;"> ...
+</span></code></pre>
+<p>in the Varlociraptor model in such cases, because it will otherwise detect a read position bias for those variants covered only by a single amplicon. Even for few amplicons the model would otherwise overestimate the degrees of freedom, thereby leading to artificially weak probabilities.</p>
+<h2 id="tumor-normal-variant-calling">Tumor-normal variant calling</h2>
+<p>Let <code>tumor.bcf</code> and <code>normal.bcf</code> be the preprocessed observations (see above) of the tumor and healthy/normal sample, respectively.
+Then, variants of all lengths can be called with</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">varlociraptor</span><span style="color:#c0c5ce;"> call variants tumor-normal</span><span style="color:#bf616a;"> --purity</span><span style="color:#c0c5ce;"> 0.75</span><span style="color:#bf616a;"> --tumor</span><span style="color:#c0c5ce;"> tumor.bcf</span><span style="color:#bf616a;"> --normal</span><span style="color:#c0c5ce;"> normal.bcf &gt; calls.bcf
+</span></code></pre>
+<p>with <code>0.75</code> being the purity (i.e. the cancer cell content) of the tumor sample.
+The result is a proper stastistical assessment of the somatic and germline variants, without the need to apply any ad-hoc filtering.
+Instead, it should be followed by controlling the false discovery rate over the desired events, see [Filtering]({{&lt; ref &quot;filtering.md&quot; &gt;}}).</p>
+<h2 id="generic-variant-calling">Generic variant calling</h2>
+<p>The generic mode allows to define a calling scenario via a variant calling grammar.
+The grammar allows to define the desired scenario in a <a href="https://yaml.org">YAML</a> file.
+For example, the following defines a normal/tumor/relapse model with a uniform prior (i.e., joint calling of tumor and relapse after therapy against normal):</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">samples</span><span style="color:#c0c5ce;">:
+  </span><span style="color:#bf616a;">normal</span><span style="color:#c0c5ce;">:
+    </span><span style="color:#bf616a;">resolution</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">5
+    </span><span style="color:#bf616a;">universe</span><span style="color:#c0c5ce;">: &quot;</span><span style="color:#a3be8c;">0.0 | 0.5 | 1.0 | ]0.0,0.5[</span><span style="color:#c0c5ce;">&quot;
+  </span><span style="color:#bf616a;">tumor</span><span style="color:#c0c5ce;">:
+    </span><span style="color:#bf616a;">resolution</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">100
+    </span><span style="color:#bf616a;">universe</span><span style="color:#c0c5ce;">: &quot;</span><span style="color:#a3be8c;">[0.0,1.0]</span><span style="color:#c0c5ce;">&quot;
+    </span><span style="color:#bf616a;">contamination</span><span style="color:#c0c5ce;">:
+      </span><span style="color:#bf616a;">by</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">normal
+      fraction</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">0.25
+  </span><span style="color:#bf616a;">relapse</span><span style="color:#c0c5ce;">:
+    </span><span style="color:#bf616a;">resolution</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">100
+    </span><span style="color:#bf616a;">universe</span><span style="color:#c0c5ce;">: &quot;</span><span style="color:#a3be8c;">[0.0,1.0]</span><span style="color:#c0c5ce;">&quot;
+    </span><span style="color:#bf616a;">contamination</span><span style="color:#c0c5ce;">:
+      </span><span style="color:#bf616a;">by</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">normal
+      fraction</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">0.53
+
+</span><span style="color:#bf616a;">events</span><span style="color:#c0c5ce;">:
+  </span><span style="color:#bf616a;">germline</span><span style="color:#c0c5ce;">:        &quot;</span><span style="color:#a3be8c;">normal:0.5 | normal:1.0</span><span style="color:#c0c5ce;">&quot;
+  </span><span style="color:#bf616a;">somatic_normal</span><span style="color:#c0c5ce;">:  &quot;</span><span style="color:#a3be8c;">normal:]0.0,0.5[</span><span style="color:#c0c5ce;">&quot;
+  </span><span style="color:#bf616a;">somatic_tumor</span><span style="color:#c0c5ce;">:   &quot;</span><span style="color:#a3be8c;">normal:0.0 &amp; tumor:]0.0,1.0]</span><span style="color:#c0c5ce;">&quot;
+  </span><span style="color:#bf616a;">somatic_relapse</span><span style="color:#c0c5ce;">: &quot;</span><span style="color:#a3be8c;">normal:0.0 &amp; tumor:0.0 &amp; relapse:]0.0,1.0]</span><span style="color:#c0c5ce;">&quot;
+</span></code></pre>
+<p>In the following, we briefly describe each element for the grammar.</p>
+<ul>
+<li><code>samples</code>: this section contains the definition of the involved samples. Each sample is listed by its name (e.g. <code>normal</code>) which is referred to later in the <code>events</code> section.</li>
+<li><code>resolution</code>: the number of points in allele frequency space to evaluate when integrating over continuous allele frequency intervals (e.g. <code>]0.0,0.5[</code>). A resolution of 100 in an allele frequency interval of <code>]0.0,1.0[</code> means that allele frequency is evaluated in steps of size <code>0.01</code>.</li>
+<li><code>universe</code>: valid allele frequencies in the given sample. The operator <code>|</code> denotes a logical &quot;or&quot;. For example <code>0.0 | 0.5 | 1.0 | ]0.0,0.5[</code> means that an allele frequency of <code>0.0</code>, <code>0.5</code>, <code>1.0</code> or any frequency in the interval <code>]0.0,0.5[</code> (with exlcusive bounds) is possible for the particular sample. Defining a <code>universe</code> means that a uniform prior is used. Alternatively, when the mutation rates are known, it is possible to configure Varlociraptors joint prior distribution that allows to model population genetics, mendelian inheritance and tumor evolution. See the next section for details.</li>
+<li><code>contamination</code>: denotes the contamination of the sample with another sample, given by its name after the <code>by</code> key, and the fraction of contamination after the <code>fraction</code> key.</li>
+<li><code>events</code>: this section contains the definition of events that shall be evaluated. Each event is a boolean logic formula over operands that define allele frequencies or allele frequency intervals in particular samples. These operands have the form <code>samplename:spec</code>, where spec is the specification of an allele frequency (e.g. <code>0.5</code>) or an allele frequency interval (inclusive: <code>[a,b]</code>, left-exclusive: <code>]a,b]</code>, right-exclusive: <code>[a,b[</code>, exclusive: <code>]a,b[</code>).</li>
+<li><code>expressions</code>: analogous to <code>events</code>, expressions allow to define formulas, each with a given name. However, expressions are by default ignored, and have to be explicitly used from within <code>events</code> formulae. For example, let <code>myexpr</code> be the name of an expression, then it can be used in any formula by specifying <code>$myexpr</code>.</li>
+</ul>
+<p>For each variant, Valrociraptor will calculate the probability of each defined event to be true.
+Importantly, for proper results, the given events have to <strong>cover the entire range of possibilities</strong>. 
+Otherwise, the calculated posterior probabilities would be biased.
+The absent event (i.e. here <code>tumor:0.0 &amp; normal:0.0 &amp; relapse:0.0</code>) is added implicitly though.</p>
+<p>Let <code>scenario.yaml</code> be the defined calling scenario (e.g., as above).
+Let <code>relapse.bcf</code>, <code>tumor.bcf</code>, and <code>normal.bcf</code> be the preprocessed observations of relapse, tumor and healthy/normal sample, respectively, as defined above.
+Then, the calling command would be</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">varlociraptor</span><span style="color:#c0c5ce;"> call variants generic</span><span style="color:#bf616a;"> --scenario</span><span style="color:#c0c5ce;"> scenario.yaml</span><span style="color:#bf616a;"> --obs</span><span style="color:#c0c5ce;"> relapse=relapse.sorted.bcf tumor=tumor.bcf normal=normal.bam &gt; calls.bcf
+</span></code></pre>
+<p>Note that now, observation files are given with a leading name, which has to correspond to the name defined in the scenario YAML.
+The result is a proper stastistical assessment of the desired scenario, without the need to apply any ad-hoc filtering.
+Instead, it should be followed by controlling the false discovery rate over the desired events, see [Filtering]({{&lt; ref &quot;filtering.md&quot; &gt;}}).</p>
+<h3 id="configuring-the-joint-prior-distribution">Configuring the joint prior distribution</h3>
+<p>When mutation rates for the species you investigate (or the tumor) are known, it is possible to inform Varlociraptor about such prior knowledge, including inheritance relations. 
+Which sufficient evidence, such prior knowledge is less important, however, it can play a role in corner cases (in particular at low coverage), and it can help the system to make the correct decision in case of ambiguity.
+In the following example, instead of defining uniform allele frequency universes as above, we define the inheritance relationship between samples and the properties of the underlying species.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#bf616a;">species</span><span style="color:#c0c5ce;">:
+  </span><span style="color:#bf616a;">genome-size</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">3.5e9
+  heterozygosity</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">0.001
+  </span><span style="color:#bf616a;">germline-mutation-rate</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">1e-3
+  ploidy</span><span style="color:#c0c5ce;">:
+    </span><span style="color:#bf616a;">male</span><span style="color:#c0c5ce;">:
+      </span><span style="color:#bf616a;">all</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">2
+      </span><span style="color:#bf616a;">X</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">1
+      Y</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">1
+    </span><span style="color:#bf616a;">female</span><span style="color:#c0c5ce;">:
+      </span><span style="color:#bf616a;">all</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">2
+      </span><span style="color:#bf616a;">X</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">2
+      Y</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">0
+
+</span><span style="color:#bf616a;">samples</span><span style="color:#c0c5ce;">:
+  </span><span style="color:#bf616a;">mother</span><span style="color:#c0c5ce;">:
+    </span><span style="color:#bf616a;">sex</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">female
+  father</span><span style="color:#c0c5ce;">:
+    </span><span style="color:#bf616a;">sex</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">male
+  daughter</span><span style="color:#c0c5ce;">:
+    </span><span style="color:#bf616a;">sex</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">female
+    somatic-effective-mutation-rate</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">1e-10
+    inheritance</span><span style="color:#c0c5ce;">:
+      </span><span style="color:#bf616a;">mendelian</span><span style="color:#c0c5ce;">:
+        </span><span style="color:#bf616a;">from</span><span style="color:#c0c5ce;">:
+          - </span><span style="color:#bf616a;">mother
+          </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">father
+  tumor</span><span style="color:#c0c5ce;">:
+    </span><span style="color:#bf616a;">sex</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">female
+    somatic-effective-mutation-rate</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">1e-6
+    inheritance</span><span style="color:#c0c5ce;">:
+      </span><span style="color:#bf616a;">clonal</span><span style="color:#c0c5ce;">:
+        </span><span style="color:#bf616a;">from</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">daughter
+        somatic</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">false
+    </span><span style="color:#bf616a;">contamination</span><span style="color:#c0c5ce;">:
+      </span><span style="color:#bf616a;">by</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">normal
+      fraction</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">0.1
+
+</span><span style="color:#bf616a;">events</span><span style="color:#c0c5ce;">:
+  </span><span style="color:#bf616a;">germline_denovo</span><span style="color:#c0c5ce;">:    &quot;</span><span style="color:#a3be8c;">(daughter:0.5 | daughter:1.0) &amp; father:0.0 &amp; mother:0.0</span><span style="color:#c0c5ce;">&quot;
+  </span><span style="color:#bf616a;">somatic_normal</span><span style="color:#c0c5ce;">:     &quot;</span><span style="color:#a3be8c;">daughter:]0.0,0.5[</span><span style="color:#c0c5ce;">&quot;
+  </span><span style="color:#bf616a;">somatic_tumor</span><span style="color:#c0c5ce;">:      &quot;</span><span style="color:#a3be8c;">daughter:0.0 &amp; tumor:]0.0,1.0]</span><span style="color:#c0c5ce;">&quot;
+  </span><span style="color:#bf616a;">germline_inherited</span><span style="color:#c0c5ce;">: &quot;</span><span style="color:#a3be8c;">!daugher:0.0 &amp; (!father:0.0 | !mother:0.0)</span><span style="color:#c0c5ce;">&quot;
+  </span><span style="color:#bf616a;">germline_lost</span><span style="color:#c0c5ce;">:      &quot;</span><span style="color:#a3be8c;">daughter:0.0 &amp; (!father:0.0 | !mother:0.0)
+</span></code></pre>
+<p>Compared to the initial normal/tumor/relapse with a uniform prior example shown above, some new elements appear:</p>
+<ul>
+<li><code>species</code>: here, properties of the underlying species are defined, that is, the genome size (needed for the somatic prior), the heterozygosity (fraction of expected heterozygous sites), the germline mutation rate (for de novo mutations during the mendelian inheritance process), the ploidy for each sex. For the latter, <code>all</code> denotes the ploidy of all chromosomes, while below special cases are listed, e.g., for <code>X</code> and <code>Y</code> chromosomes.</li>
+<li><code>sex</code>: denotes the sex of each sample, thereby defining the ploidy, which is taken from the species definition.</li>
+<li><code>somatic-effective-mutation-rate</code>: denotes the expected rate of de novo somatic mutations that survive (i.e. aren't lethal) to formulate a prior assumption about the expected somatic allele frequency distribution (as presented by <a href="https://doi.org/10.1038/ng.3489">Williams et al. Nature Genetics 2016</a>). Such rates will usually differ between normal (can be found in literature) and tumor samples, and should be estimated or looked up for a given tumor instance. Note that it is also possible to simply define an allele frequency <code>universe</code> for a tumor sample, thereby avoiding to specify a somatic effective mutation rate, in case it is still unknown. In that case, a uniform prior would be used for the tumor, while the rest of the sample would be treated according to the defined population genetic and mendelian priors.</li>
+<li><code>inheritance</code>: Relationship to other samples. Inheritance can be either <code>mendelian</code> (here, the <code>daughter</code> inherits from <code>father</code> and <code>mother</code>), or <code>clonal</code> (here, the <code>tumor</code> inherits from the normal tissue of the <code>daughter</code>). In case of the latter, it has to be specified additionally whether somatic mutations from the parental clone are inherited or not.</li>
+</ul>
+<p>All other keywords can be looked up in the section above.</p>
+<h3 id="grammar-applications">Grammar applications</h3>
+<p>Various concrete applications of the grammar can be found in the <a href="https://varlociraptor.github.io/varlociraptor-scenarios">Varlociraptor Scenario Catalog</a>.
+You are welcome to submit further applications there.</p>
+<h2 id="supported-variant-types">Supported variant types</h2>
+<p>Varlociraptor implements support for all kinds of variants in all length ranges</p>
+<ul>
+<li>SNVs,</li>
+<li>MNVs (multiple nucleotide variants, as called by e.g. Freebayes),</li>
+<li>replacements (small and large),</li>
+<li>Insertions (small and large),</li>
+<li>Deletions (small and large),</li>
+<li>Inversions (small and large),</li>
+<li>Duplications (small and large),</li>
+<li>Breakends.</li>
+</ul>
+
+
+                </div>
+            </div>
+
+            <div class="prev-link">
+                
+    
+        <a class="previous" href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;installation&#x2F;"><</a>
+    
+
+            </div>
+
+            <div class="next-link">
+                
+    
+        <a class="next" href="https:&#x2F;&#x2F;varlociraptor.github.io&#x2F;docs&#x2F;filtering&#x2F;">></a>
+    
+
+            </div>
+        </div>
+
+        
+            
+            <script type="text/javascript" src="https://varlociraptor.github.io/elasticlunr.min.js"></script>
+            <script type="text/javascript" src="https://varlociraptor.github.io/search_index.en.js"></script>
+            
+            <script type="text/javascript" src="https://varlociraptor.github.io/book.js"></script>
+        
+    </body>
+
+</html>
